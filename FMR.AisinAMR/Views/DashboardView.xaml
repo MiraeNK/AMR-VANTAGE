@@ -1,0 +1,332 @@
+<UserControl x:Class="FMR.AisinAMR.Views.DashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:conv="clr-namespace:FMR.AisinAMR.Converters"
+             Background="{StaticResource BG.Shell}">
+    <UserControl.Resources>
+        <conv:BoolToColorConverter      x:Key="BoolToColorConverter" />
+        <conv:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Disabled"
+                  Background="{StaticResource BG.Shell}">
+        <StackPanel Margin="28,24">
+
+            <!-- ── Page Header ── -->
+            <Grid Margin="0,0,0,28">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Dashboard"
+                               Foreground="{StaticResource Text.Primary}"
+                               FontSize="22" FontWeight="Bold" />
+                    <TextBlock Text="{Binding LastUpdated, StringFormat='Last updated: {0:HH:mm:ss}'}"
+                               Foreground="{StaticResource Text.Muted}"
+                               FontSize="12" Margin="0,4,0,0" />
+                </StackPanel>
+
+                <Button Grid.Column="1"
+                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                        Command="{Binding RefreshCommand}"
+                        Foreground="{StaticResource Accent.Cyan}"
+                        BorderBrush="{StaticResource Accent.Cyan}"
+                        Height="36">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Refresh" Width="16" Height="16" Margin="0,0,6,0" />
+                        <TextBlock Text="Refresh" FontSize="12" />
+                    </StackPanel>
+                </Button>
+            </Grid>
+
+            <!-- ── Summary Metrics Row ── -->
+            <UniformGrid Columns="4" Margin="0,0,0,20">
+
+                <!-- Total Robots Online -->
+                <Border Background="#080E14" CornerRadius="8"
+                        BorderBrush="#1E2A38" BorderThickness="1"
+                        Padding="20,16" Margin="0,0,10,0">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                            <materialDesign:PackIcon Kind="RobotIndustrialOutline"
+                                                     Width="14" Height="14"
+                                                     Foreground="{StaticResource Accent.Cyan}"
+                                                     VerticalAlignment="Center"
+                                                     Margin="0,0,6,0" />
+                            <TextBlock Text="ROBOTS ONLINE"
+                                       Foreground="{StaticResource Text.Muted}"
+                                       FontSize="10" FontWeight="SemiBold"
+                                       VerticalAlignment="Center" />
+                        </StackPanel>
+                        <TextBlock Text="{Binding ConnectedRobotsCount}"
+                                   Foreground="{StaticResource Accent.Cyan}"
+                                   FontSize="40" FontWeight="Bold" />
+                        <TextBlock Text="{Binding RobotList.Count, StringFormat='of {0} registered'}"
+                                   Foreground="{StaticResource Text.Muted}"
+                                   FontSize="11" />
+                    </StackPanel>
+                </Border>
+
+                <!-- MQTT Status -->
+                <Border Background="#080E14" CornerRadius="8"
+                        BorderBrush="#1E2A38" BorderThickness="1"
+                        Padding="20,16" Margin="5,0,5,0">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                            <materialDesign:PackIcon Kind="TransmissionTower"
+                                                     Width="14" Height="14"
+                                                     Foreground="{StaticResource Accent.Green}"
+                                                     VerticalAlignment="Center"
+                                                     Margin="0,0,6,0" />
+                            <TextBlock Text="MQTT BROKER"
+                                       Foreground="{StaticResource Text.Muted}"
+                                       FontSize="10" FontWeight="SemiBold"
+                                       VerticalAlignment="Center" />
+                        </StackPanel>
+                        <TextBlock FontSize="22" FontWeight="Bold">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Text" Value="Offline" />
+                                    <Setter Property="Foreground" Value="#FF5252" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsMqttServerOnline}" Value="True">
+                                            <Setter Property="Text" Value="Online" />
+                                            <Setter Property="Foreground" Value="#69F0AE" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                        <TextBlock Text="Port 1883 · localhost"
+                                   Foreground="{StaticResource Text.Muted}"
+                                   FontSize="11" />
+                    </StackPanel>
+                </Border>
+
+                <!-- Messages Received -->
+                <Border Background="#080E14" CornerRadius="8"
+                        BorderBrush="#1E2A38" BorderThickness="1"
+                        Padding="20,16" Margin="5,0,5,0">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                            <materialDesign:PackIcon Kind="MessageTextOutline"
+                                                     Width="14" Height="14"
+                                                     Foreground="{StaticResource Accent.Orange}"
+                                                     VerticalAlignment="Center"
+                                                     Margin="0,0,6,0" />
+                            <TextBlock Text="MESSAGES"
+                                       Foreground="{StaticResource Text.Muted}"
+                                       FontSize="10" FontWeight="SemiBold"
+                                       VerticalAlignment="Center" />
+                        </StackPanel>
+                        <TextBlock Text="{Binding MqttMessages.Count}"
+                                   Foreground="{StaticResource Accent.Orange}"
+                                   FontSize="40" FontWeight="Bold" />
+                        <TextBlock Text="received (last 50)"
+                                   Foreground="{StaticResource Text.Muted}"
+                                   FontSize="11" />
+                    </StackPanel>
+                </Border>
+
+                <!-- Last Update -->
+                <Border Background="#080E14" CornerRadius="8"
+                        BorderBrush="#1E2A38" BorderThickness="1"
+                        Padding="20,16" Margin="10,0,0,0">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                            <materialDesign:PackIcon Kind="ClockOutline"
+                                                     Width="14" Height="14"
+                                                     Foreground="{StaticResource Text.Muted}"
+                                                     VerticalAlignment="Center"
+                                                     Margin="0,0,6,0" />
+                            <TextBlock Text="LAST ACTIVITY"
+                                       Foreground="{StaticResource Text.Muted}"
+                                       FontSize="10" FontWeight="SemiBold"
+                                       VerticalAlignment="Center" />
+                        </StackPanel>
+                        <TextBlock Text="{Binding LastUpdated, StringFormat='{}{0:HH:mm:ss}'}"
+                                   Foreground="{StaticResource Text.Primary}"
+                                   FontSize="28" FontWeight="Bold" FontFamily="Consolas" />
+                        <TextBlock Text="{Binding LastUpdated, StringFormat='{}{0:dd MMM yyyy}'}"
+                                   Foreground="{StaticResource Text.Muted}"
+                                   FontSize="11" />
+                    </StackPanel>
+                </Border>
+            </UniformGrid>
+
+            <!-- ── Fleet Status Table ── -->
+            <Border Background="#080E14" CornerRadius="8"
+                    BorderBrush="#1E2A38" BorderThickness="1"
+                    Padding="20" Margin="0,0,0,16">
+                <StackPanel>
+                    <TextBlock Text="FLEET STATUS"
+                               Foreground="{StaticResource Text.Muted}"
+                               FontSize="10" FontWeight="SemiBold"
+                               Margin="0,0,0,14" />
+
+                    <!-- Table Header -->
+                    <Grid Margin="0,0,0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="16" />
+                            <ColumnDefinition Width="160" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="80" />
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="80" />
+                            <ColumnDefinition Width="100" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="1" Text="ROBOT" Foreground="{StaticResource Text.Muted}" FontSize="10" FontWeight="SemiBold" />
+                        <TextBlock Grid.Column="2" Text="IP ADDRESS" Foreground="{StaticResource Text.Muted}" FontSize="10" FontWeight="SemiBold" />
+                        <TextBlock Grid.Column="3" Text="BATTERY" Foreground="{StaticResource Text.Muted}" FontSize="10" FontWeight="SemiBold" />
+                        <TextBlock Grid.Column="4" Text="MODE" Foreground="{StaticResource Text.Muted}" FontSize="10" FontWeight="SemiBold" />
+                        <TextBlock Grid.Column="5" Text="PLC" Foreground="{StaticResource Text.Muted}" FontSize="10" FontWeight="SemiBold" />
+                        <TextBlock Grid.Column="6" Text="NAV STATE" Foreground="{StaticResource Text.Muted}" FontSize="10" FontWeight="SemiBold" />
+                    </Grid>
+
+                    <Separator Background="#1E2A38" Margin="0,0,0,8" />
+
+                    <!-- Table Rows -->
+                    <ItemsControl ItemsSource="{Binding RobotList}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,4,0,4">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="16" />
+                                        <ColumnDefinition Width="160" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="80" />
+                                        <ColumnDefinition Width="100" />
+                                        <ColumnDefinition Width="80" />
+                                        <ColumnDefinition Width="100" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- Online Dot -->
+                                    <Ellipse Grid.Column="0" Width="8" Height="8" VerticalAlignment="Center">
+                                        <Ellipse.Style>
+                                            <Style TargetType="Ellipse">
+                                                <Setter Property="Fill" Value="#FF1744" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsOnline}" Value="True">
+                                                        <Setter Property="Fill" Value="#00E676" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Ellipse.Style>
+                                    </Ellipse>
+
+                                    <TextBlock Grid.Column="1" Text="{Binding RobotName}"
+                                               Foreground="{StaticResource Text.Primary}"
+                                               FontSize="13" FontWeight="SemiBold"
+                                               VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="2" Text="{Binding IpAddress}"
+                                               Foreground="{StaticResource Text.Muted}"
+                                               FontFamily="Consolas" FontSize="12"
+                                               VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="3" Text="{Binding BatteryLevel, StringFormat='{}{0:F0} %'}"
+                                               Foreground="{StaticResource Accent.Green}"
+                                               FontSize="13" FontWeight="SemiBold"
+                                               VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="4" Text="{Binding CurrentMode}"
+                                               Foreground="{StaticResource Accent.Cyan}"
+                                               FontSize="12"
+                                               VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="5" FontSize="12" FontWeight="SemiBold"
+                                               VerticalAlignment="Center">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Text" Value="No" />
+                                                <Setter Property="Foreground" Value="#FF5252" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding PlcConnected}" Value="True">
+                                                        <Setter Property="Text" Value="OK" />
+                                                        <Setter Property="Foreground" Value="#69F0AE" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                    <Border Grid.Column="6" Background="#1A2035" CornerRadius="4"
+                                            Padding="8,3" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding NavState}"
+                                                   Foreground="{StaticResource Accent.Cyan}"
+                                                   FontSize="11" />
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <!-- ── MQTT Event Log ── -->
+            <Border Background="#080E14" CornerRadius="8"
+                    BorderBrush="#1E2A38" BorderThickness="1"
+                    Padding="20">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,14">
+                        <materialDesign:PackIcon Kind="FormatListBulletedSquare"
+                                                 Width="14" Height="14"
+                                                 Foreground="{StaticResource Text.Muted}"
+                                                 VerticalAlignment="Center"
+                                                 Margin="0,0,6,0" />
+                        <TextBlock Text="MQTT EVENT LOG"
+                                   Foreground="{StaticResource Text.Muted}"
+                                   FontSize="10" FontWeight="SemiBold"
+                                   VerticalAlignment="Center" />
+                        <TextBlock Text="{Binding MqttMessages.Count, StringFormat=' ({0} msg)'}"
+                                   Foreground="{StaticResource Text.Muted}"
+                                   FontSize="10" VerticalAlignment="Center" />
+                    </StackPanel>
+
+                    <Border Background="#010409" CornerRadius="4"
+                            BorderBrush="#21262D" BorderThickness="1">
+                        <ListBox ItemsSource="{Binding MqttMessages}"
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 MaxHeight="220"
+                                 ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                 FontFamily="Consolas"
+                                 FontSize="11"
+                                 Padding="12,8">
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="Background" Value="Transparent" />
+                                    <Setter Property="Padding" Value="0,2" />
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="ListBoxItem">
+                                                <ContentPresenter />
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Timestamp, StringFormat='[HH:mm:ss] '}"
+                                                   Foreground="#555" FontSize="11" FontFamily="Consolas" />
+                                        <TextBlock Text="{Binding Topic}"
+                                                   Foreground="{StaticResource Accent.Cyan}"
+                                                   FontSize="11" FontFamily="Consolas"
+                                                   Margin="0,0,8,0" />
+                                        <TextBlock Text="{Binding Payload}"
+                                                   Foreground="{StaticResource Text.Secondary}"
+                                                   FontSize="11" FontFamily="Consolas"
+                                                   TextTrimming="CharacterEllipsis"
+                                                   MaxWidth="480" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Border>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,120 @@
+<Application x:Class="FMR.AisinAMR.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:conv="clr-namespace:FMR.AisinAMR.Converters"
+             StartupUri="Views/MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+
+                <!-- MaterialDesign Dark Theme -->
+                <materialDesign:BundledTheme BaseTheme="Dark"
+                                             PrimaryColor="Teal"
+                                             SecondaryColor="LightBlue" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign3.Defaults.xaml" />
+
+            </ResourceDictionary.MergedDictionaries>
+
+            <conv:PercentToWidthConverter x:Key="PercentToWidthConverter" />
+            <conv:PageNameToVisibilityConverter x:Key="PageNameToVisibilityConverter" />
+            <conv:CommandStatusColorConverter x:Key="CommandStatusColorConverter" />
+            <conv:NodeStatusColorConverter x:Key="NodeStatusColorConverter" />
+
+            <!-- ═══════════════════════════════════════════════ -->
+            <!--  CUSTOM COLOR PALETTE — Industrial Dark         -->
+            <!-- ═══════════════════════════════════════════════ -->
+
+            <!-- Background layers -->
+            <SolidColorBrush x:Key="BG.Shell"        Color="#0D1117" />
+            <SolidColorBrush x:Key="BG.Sidebar"      Color="#161B22" />
+            <SolidColorBrush x:Key="BG.Header"       Color="#161B22" />
+            <SolidColorBrush x:Key="BG.Card"         Color="#1C2333" />
+            <SolidColorBrush x:Key="BG.CardHover"    Color="#212940" />
+            <SolidColorBrush x:Key="BG.Input"        Color="#0D1117" />
+
+            <!-- Accent colors -->
+            <SolidColorBrush x:Key="Accent.Cyan"     Color="#00E5FF" />
+            <SolidColorBrush x:Key="Accent.Green"    Color="#00E676" />
+            <SolidColorBrush x:Key="Accent.Orange"   Color="#FF9100" />
+            <SolidColorBrush x:Key="Accent.Red"      Color="#FF1744" />
+            <SolidColorBrush x:Key="Accent.Blue"     Color="#2979FF" />
+
+            <!-- Text -->
+            <SolidColorBrush x:Key="Text.Primary"    Color="#E6EDF3" />
+            <SolidColorBrush x:Key="Text.Secondary"  Color="#8B949E" />
+            <SolidColorBrush x:Key="Text.Muted"      Color="#484F58" />
+
+            <!-- Border -->
+            <SolidColorBrush x:Key="Border.Subtle"   Color="#21262D" />
+            <SolidColorBrush x:Key="Border.Default"  Color="#30363D" />
+
+            <!-- ═══════════════════════════════════════════════ -->
+            <!--  SIDEBAR NAV BUTTON STYLE                       -->
+            <!-- ═══════════════════════════════════════════════ -->
+            <Style x:Key="SidebarNavButton" TargetType="Button">
+                <Setter Property="Background"       Value="Transparent" />
+                <Setter Property="Foreground"       Value="{StaticResource Text.Secondary}" />
+                <Setter Property="BorderThickness"  Value="0" />
+                <Setter Property="Height"           Value="48" />
+                <Setter Property="HorizontalContentAlignment" Value="Left" />
+                <Setter Property="Padding"          Value="20,0,16,0" />
+                <Setter Property="Cursor"           Value="Hand" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="Border"
+                                    Background="{TemplateBinding Background}"
+                                    CornerRadius="8"
+                                    Margin="8,2">
+                                <ContentPresenter VerticalAlignment="Center"
+                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                  Margin="{TemplateBinding Padding}" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="Border" Property="Background" Value="#1F2937" />
+                                    <Setter Property="Foreground" Value="{StaticResource Text.Primary}" />
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter TargetName="Border" Property="Background" Value="#263548" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!-- Active nav button -->
+            <Style x:Key="SidebarNavButtonActive" TargetType="Button"
+                   BasedOn="{StaticResource SidebarNavButton}">
+                <Setter Property="Background"  Value="#162032" />
+                <Setter Property="Foreground"  Value="{StaticResource Accent.Cyan}" />
+            </Style>
+
+            <!-- ═══════════════════════════════════════════════ -->
+            <!--  METRIC CARD STYLE                              -->
+            <!-- ═══════════════════════════════════════════════ -->
+            <Style x:Key="MetricCard" TargetType="Border">
+                <Setter Property="Background"       Value="{StaticResource BG.Card}" />
+                <Setter Property="CornerRadius"     Value="12" />
+                <Setter Property="Padding"          Value="24,20" />
+                <Setter Property="Effect">
+                    <Setter.Value>
+                        <DropShadowEffect Color="#000000"
+                                          BlurRadius="24"
+                                          ShadowDepth="4"
+                                          Opacity="0.4"
+                                          Direction="270" />
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="{StaticResource BG.CardHover}" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
