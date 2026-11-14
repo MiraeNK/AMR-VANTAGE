@@ -1,0 +1,25 @@
+<Application x:Class="Vantage.Studio.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Vantage.Studio"
+             ShutdownMode="OnExplicitShutdown">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Themes/Industrial.xaml" />
+                <ResourceDictionary Source="Themes/Brand.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <local:RatioToWidthConverter x:Key="RatioToWidth" />
+            <local:InverseBoolConverter x:Key="Not" />
+            <local:VerdictBrushConverter x:Key="VerdictBrush" />
+            <BooleanToVisibilityConverter x:Key="BoolToVis" />
+            <local:EnumMatchConverter x:Key="Is" />
+            <local:EnumMatchConverter x:Key="IsVis" ToVisibility="True" />
+            <local:NullToVisibilityConverter x:Key="NullToVis" />
+            <local:NullToVisibilityConverter x:Key="NotNullToCollapsed" Invert="True" />
+            <local:BoolToBrushConverter x:Key="OkBrush" True="{StaticResource State.Ok}" False="{StaticResource State.Alarm}" />
+            <local:BoolToBrushConverter x:Key="AlarmBrush" True="{StaticResource State.Alarm}" False="{StaticResource Text.OnDark}" />
+            <local:BoolToBrushConverter x:Key="RunBrush" True="{StaticResource State.Ok}" False="{StaticResource State.Off}" />
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

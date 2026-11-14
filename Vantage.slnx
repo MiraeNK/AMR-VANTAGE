@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Vantage.Core/Vantage.Core.csproj" />
+    <Project Path="src/Vantage.Fleet/Vantage.Fleet.csproj" />
+    <Project Path="src/Vantage.Studio/Vantage.Studio.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Vantage.Core.Tests/Vantage.Core.Tests.csproj" />
+  </Folder>
+</Solution>
