@@ -1,0 +1,79 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- FMR VANTAGE brand (docs/branding/logo-concept-02). Geometry copied from the SVG sources. -->
+    <Color x:Key="Brand.BlueColor">#075BCC</Color>
+    <Color x:Key="Brand.NavyColor">#071D39</Color>
+    <SolidColorBrush x:Key="Brand.Blue" Color="#075BCC" />
+    <SolidColorBrush x:Key="Brand.Navy" Color="#071D39" />
+
+    <PathGeometry x:Key="Brand.F" Figures="M35 0H189L148 41H46V55H132L111 76H70V95H46V115L0 161V35Z" />
+    <PathGeometry x:Key="Brand.M" Figures="M9 170L70 109V133L100 150L131 133V117L200 48V161L166 195H142V166L100 190L58 166V195H9Z" />
+
+    <!-- Symbol only, blue -->
+    <DrawingImage x:Key="Brand.Symbol">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <GeometryDrawing Brush="#075BCC" Geometry="{StaticResource Brand.F}" />
+                <GeometryDrawing Brush="#075BCC" Geometry="{StaticResource Brand.M}" />
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <!-- Symbol only, white (dark surfaces) -->
+    <DrawingImage x:Key="Brand.SymbolWhite">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <GeometryDrawing Brush="White" Geometry="{StaticResource Brand.F}" />
+                <GeometryDrawing Brush="White" Geometry="{StaticResource Brand.M}" />
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <!-- Primary logo: symbol + wordmark (blue / navy) -->
+    <DrawingImage x:Key="Brand.Logo">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <DrawingGroup>
+                    <DrawingGroup.Transform>
+                        <TransformGroup>
+                            <ScaleTransform ScaleX="1.08" ScaleY="1.08" />
+                            <TranslateTransform X="110" Y="55" />
+                        </TransformGroup>
+                    </DrawingGroup.Transform>
+                    <GeometryDrawing Brush="#075BCC" Geometry="{StaticResource Brand.F}" />
+                    <GeometryDrawing Brush="#075BCC" Geometry="{StaticResource Brand.M}" />
+                </DrawingGroup>
+                <DrawingGroup>
+                    <DrawingGroup.Transform>
+                        <TransformGroup>
+                            <MatrixTransform Matrix="1,0,-0.2,1,22.4,0" />
+                            <ScaleTransform ScaleX="0.38" ScaleY="0.38" />
+                            <TranslateTransform X="391" Y="62" />
+                        </TransformGroup>
+                    </DrawingGroup.Transform>
+                    <GeometryDrawing Brush="#071D39" Geometry="M0 0H88V24H27V47H76V71H27V112H0Z" />
+                    <GeometryDrawing Brush="#071D39" Geometry="M109 112V0H138L163 49L188 0H217V112H191V44L172 81H154L135 44V112Z" />
+                    <GeometryDrawing Brush="#071D39" Geometry="M229 112V0H290Q323 0 323 31V38Q323 62 302 68L330 112H298L273 72H256V112ZM256 24V49H286Q296 49 296 39V34Q296 24 286 24Z" />
+                </DrawingGroup>
+                <DrawingGroup>
+                    <DrawingGroup.Transform>
+                        <TransformGroup>
+                            <MatrixTransform Matrix="1,0,-0.2,1,22.4,0" />
+                            <TranslateTransform X="383" Y="146" />
+                        </TransformGroup>
+                    </DrawingGroup.Transform>
+                    <GeometryDrawing Brush="#071D39" Geometry="M0 0H29L49 80L70 0H99L64 112H33Z" />
+                    <GeometryDrawing Brush="#071D39" Geometry="M143 0H175L212 112H184L177 88H140L133 112H105ZM158 26L146 65H170Z" />
+                    <GeometryDrawing Brush="#071D39" Geometry="M223 112V0H251L293 69V0H319V112H291L249 43V112Z" />
+                    <GeometryDrawing Brush="#071D39" Geometry="M332 0H432V25H395V112H368V25H332Z" />
+                    <GeometryDrawing Brush="#071D39" Geometry="M475 0H507L544 112H516L509 88H472L465 112H437ZM490 26L478 65H502Z" />
+                    <GeometryDrawing Brush="#071D39" Geometry="M651 0H583Q555 0 555 28V84Q555 112 583 112H651V52H603V75H625V88H587Q581 88 581 82V30Q581 24 587 24H651Z" />
+                    <GeometryDrawing Brush="#071D39" Geometry="M664 0H753V24H691V44H744V68H691V88H753V112H664Z" />
+                </DrawingGroup>
+                <!-- keep the original 1200×320 artboard -->
+                <GeometryDrawing Brush="Transparent" Geometry="M0 0H1200V320H0Z" />
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+</ResourceDictionary>

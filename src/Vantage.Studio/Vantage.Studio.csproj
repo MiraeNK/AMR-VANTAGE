@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>Vantage.Studio</RootNamespace>
+    <AssemblyName>FMRVantage</AssemblyName>
+    <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
+    <ApplicationIcon>Assets/fmr-vantage.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets/fmr-vantage-symbol.png" />
+    <Resource Include="Assets/fmr-vantage.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Vantage.Core\Vantage.Core.csproj" />
+    <ProjectReference Include="..\Vantage.Fleet\Vantage.Fleet.csproj" />
+  </ItemGroup>
+
+</Project>

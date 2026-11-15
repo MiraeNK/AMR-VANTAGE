@@ -1,0 +1,164 @@
+<Window x:Class="Vantage.Studio.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:v="clr-namespace:Vantage.Studio.Views"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:vm="clr-namespace:Vantage.Studio.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DataContext="{d:DesignInstance vm:AppViewModel}"
+        Title="{Binding Title}" Icon="pack://application:,,,/Assets/fmr-vantage.ico"
+        Width="1640" Height="980" MinWidth="1200" MinHeight="760"
+        WindowStartupLocation="CenterScreen"
+        FontFamily="{StaticResource UiFont}" FontSize="12"
+        Foreground="{StaticResource Text}" Background="{StaticResource Bg.Window}"
+        UseLayoutRounding="True" TextOptions.TextFormattingMode="Display">
+
+    <Window.Resources>
+        <!-- Activity bar button (left rail) -->
+        <Style x:Key="RailButton" TargetType="Button">
+            <Setter Property="Foreground" Value="#AEB6BF" />
+            <Setter Property="Width" Value="68" />
+            <Setter Property="Height" Value="58" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid x:Name="g" Background="Transparent">
+                            <Rectangle x:Name="mark" Width="3" HorizontalAlignment="Left" Fill="#5AA2FF" Visibility="Collapsed" />
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="g" Property="Background" Value="#0F2C55" />
+                                <Setter Property="Foreground" Value="White" />
+                            </Trigger>
+                            <Trigger Property="Tag">
+                                <Trigger.Value>
+                                    <sys:Boolean>True</sys:Boolean>
+                                </Trigger.Value>
+                                <Setter TargetName="g" Property="Background" Value="#143766" />
+                                <Setter TargetName="mark" Property="Visibility" Value="Visible" />
+                                <Setter Property="Foreground" Value="White" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Window.InputBindings>
+        <KeyBinding Key="F5" Command="{Binding Monitor.PlayCommand}" />
+        <KeyBinding Key="F6" Command="{Binding Monitor.PauseCommand}" />
+        <KeyBinding Key="F10" Command="{Binding Monitor.StepCommand}" />
+        <KeyBinding Key="R" Modifiers="Ctrl" Command="{Binding Monitor.ResetCommand}" />
+        <KeyBinding Key="S" Modifiers="Ctrl" Command="{Binding SaveProjectCommand}" />
+        <KeyBinding Key="O" Modifiers="Ctrl" Command="{Binding OpenProjectCommand}" />
+        <KeyBinding Key="N" Modifiers="Ctrl" Command="{Binding NewProjectCommand}" />
+    </Window.InputBindings>
+
+    <DockPanel>
+        <!-- ═════════════ Menu ═════════════ -->
+        <Menu DockPanel.Dock="Top" BorderBrush="{StaticResource Line}" BorderThickness="0,0,0,1">
+            <MenuItem Header="_File">
+                <MenuItem Header="New project" InputGestureText="Ctrl+N" Command="{Binding NewProjectCommand}" />
+                <MenuItem Header="New demo project" Command="{Binding NewDemoProjectCommand}" />
+                <MenuItem Header="Open project…" InputGestureText="Ctrl+O" Command="{Binding OpenProjectCommand}" />
+                <MenuItem Header="Save" InputGestureText="Ctrl+S" Command="{Binding SaveProjectCommand}" />
+                <MenuItem Header="Save as…" Command="{Binding SaveProjectAsCommand}" />
+                <Separator />
+                <MenuItem Header="Load occupancy map…" Command="{Binding Monitor.LoadMapCommand}" />
+                <MenuItem Header="Clear map" Command="{Binding Monitor.ClearMapCommand}" />
+                <Separator />
+                <MenuItem Header="Export decision journal (JSONL)…" Command="{Binding Monitor.ExportJournalCommand}" />
+                <MenuItem Header="Export message trace (JSONL)…" Command="{Binding Monitor.ExportTraceCommand}" />
+                <Separator />
+                <MenuItem Header="E_xit" Click="Exit_Click" />
+            </MenuItem>
+            <MenuItem Header="_View">
+                <MenuItem Header="Home" Command="{Binding NavigateCommand}" CommandParameter="{x:Static vm:Page.Home}" />
+                <MenuItem Header="Monitoring &amp; clearance" Command="{Binding NavigateCommand}" CommandParameter="{x:Static vm:Page.Monitor}" />
+                <MenuItem Header="Fleet setup" Command="{Binding NavigateCommand}" CommandParameter="{x:Static vm:Page.Fleet}" />
+                <MenuItem Header="Simulation studies" Command="{Binding NavigateCommand}" CommandParameter="{x:Static vm:Page.Studies}" />
+                <MenuItem Header="HMI designer" Command="{Binding NavigateCommand}" CommandParameter="{x:Static vm:Page.HmiDesigner}" />
+                <MenuItem Header="HMI runtime" Command="{Binding NavigateCommand}" CommandParameter="{x:Static vm:Page.HmiRuntime}" />
+            </MenuItem>
+            <MenuItem Header="_Run">
+                <MenuItem Header="Run" InputGestureText="F5" Command="{Binding Monitor.PlayCommand}" />
+                <MenuItem Header="Pause" InputGestureText="F6" Command="{Binding Monitor.PauseCommand}" />
+                <MenuItem Header="Step 0.1 s" InputGestureText="F10" Command="{Binding Monitor.StepCommand}" />
+                <MenuItem Header="Reset scenario" InputGestureText="Ctrl+R" Command="{Binding Monitor.ResetCommand}" />
+            </MenuItem>
+            <MenuItem Header="_Help">
+                <MenuItem Header="Message contract (vantage/v1)…" Click="Contract_Click" />
+                <MenuItem Header="About FMR Vantage…" Click="About_Click" />
+            </MenuItem>
+        </Menu>
+
+        <!-- ═════════════ Status bar ═════════════ -->
+        <Border DockPanel.Dock="Bottom" Background="{StaticResource Bg.Status}" Height="24">
+            <DockPanel DataContext="{Binding Monitor}">
+                <Border Style="{StaticResource StatusCell}" Background="{Binding IsRunning, Converter={StaticResource RunBrush}}" MinWidth="96">
+                    <TextBlock Style="{StaticResource StatusText}" Foreground="White" FontWeight="SemiBold" Text="{Binding RunState}" HorizontalAlignment="Center" />
+                </Border>
+                <Border Style="{StaticResource StatusCell}">
+                    <StackPanel Orientation="Horizontal">
+                        <Ellipse Style="{StaticResource Lamp}" Fill="{Binding BrokerOk, Converter={StaticResource OkBrush}}" Margin="0,0,7,0" />
+                        <TextBlock Style="{StaticResource StatusText}" Text="{Binding BrokerText}" />
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource StatusCell}">
+                    <TextBlock Style="{StaticResource StatusText}"><Run Text="t " Foreground="#8A939C" /><Run Text="{Binding TimeText, Mode=OneWay}" /></TextBlock>
+                </Border>
+                <Border Style="{StaticResource StatusCell}">
+                    <TextBlock Style="{StaticResource StatusText}"><Run Text="decisions " Foreground="#8A939C" /><Run Text="{Binding DecisionsText, Mode=OneWay}" /></TextBlock>
+                </Border>
+                <Border Style="{StaticResource StatusCell}">
+                    <TextBlock Style="{StaticResource StatusText}"><Run Text="conflict pairs " Foreground="#8A939C" /><Run Text="{Binding ConflictText, Mode=OneWay}" /></TextBlock>
+                </Border>
+                <Border Style="{StaticResource StatusCell}" ToolTip="Violations counted by the FMR / by the independent oracle">
+                    <TextBlock Style="{StaticResource StatusText}" Foreground="{Binding HasViolation, Converter={StaticResource AlarmBrush}}"><Run Text="violations fmr/oracle " Foreground="#8A939C" /><Run Text="{Binding ViolationsText, Mode=OneWay}" /><Run Text="   collisions " Foreground="#8A939C" /><Run Text="{Binding CollisionsText, Mode=OneWay}" /></TextBlock>
+                </Border>
+                <Border DockPanel.Dock="Right" Style="{StaticResource StatusCell}" BorderThickness="1,0,0,0">
+                    <TextBlock Style="{StaticResource StatusText}" Text="{Binding CursorText}" MinWidth="150" />
+                </Border>
+                <Border DockPanel.Dock="Right" Style="{StaticResource StatusCell}" BorderThickness="1,0,0,0">
+                    <TextBlock Style="{StaticResource StatusText}" Text="{Binding DataContext.Project.Name, RelativeSource={RelativeSource AncestorType=Window}, StringFormat=project {0}}" />
+                </Border>
+                <Border />
+            </DockPanel>
+        </Border>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="68" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- ═════════════ Activity rail ═════════════ -->
+            <Border Background="#071D39">
+                <DockPanel>
+                    <Button DockPanel.Dock="Bottom" Style="{StaticResource RailButton}" Command="{Binding SaveProjectCommand}" ToolTip="Save project (Ctrl+S)">
+                        <StackPanel>
+                            <TextBlock Text="&#xE74E;" FontFamily="{StaticResource GlyphFont}" FontSize="17" HorizontalAlignment="Center" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
+                            <TextBlock Text="Save" FontSize="9.5" Margin="0,4,0,0" HorizontalAlignment="Center" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
+                        </StackPanel>
+                    </Button>
+                    <StackPanel x:Name="Rail" Margin="0,4,0,0" />
+                </DockPanel>
+            </Border>
+
+            <!-- ═════════════ Pages (kept alive) ═════════════ -->
+            <Grid Grid.Column="1">
+                <v:HomeView DataContext="{Binding}" Visibility="{Binding Page, Converter={StaticResource IsVis}, ConverterParameter=Home}" />
+                <v:MonitorView DataContext="{Binding Monitor}" Visibility="{Binding DataContext.Page, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource IsVis}, ConverterParameter=Monitor}" />
+                <v:FleetView DataContext="{Binding Fleet}" Visibility="{Binding DataContext.Page, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource IsVis}, ConverterParameter=Fleet}" />
+                <v:StudiesView DataContext="{Binding Studies}" Visibility="{Binding DataContext.Page, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource IsVis}, ConverterParameter=Studies}" />
+                <v:HmiDesignerView DataContext="{Binding Hmi}" Visibility="{Binding DataContext.Page, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource IsVis}, ConverterParameter=HmiDesigner}" />
+                <v:HmiRuntimeView DataContext="{Binding HmiRuntime}" Visibility="{Binding DataContext.Page, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource IsVis}, ConverterParameter=HmiRuntime}" />
+            </Grid>
+        </Grid>
+    </DockPanel>
+</Window>

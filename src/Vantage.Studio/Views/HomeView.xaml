@@ -1,0 +1,210 @@
+<UserControl x:Class="Vantage.Studio.Views.HomeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:Vantage.Studio.ViewModels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance vm:AppViewModel}" Background="White">
+    <UserControl.Resources>
+        <Style x:Key="NavLink" TargetType="Button">
+            <Setter Property="Foreground" Value="{StaticResource Text}" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="b" Background="Transparent" Padding="14,7">
+                            <ContentPresenter />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="b" Property="Background" Value="#EEF2F6" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="Tile" TargetType="Button">
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="b" Background="White" BorderBrush="#D3D8DE" BorderThickness="1" Padding="14,12" Margin="0,0,12,12" Width="290">
+                            <ContentPresenter />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="b" Property="BorderBrush" Value="{StaticResource Accent}" />
+                                <Setter TargetName="b" Property="Background" Value="#F8FAFC" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <DataTemplate x:Key="TileTemplate" DataType="{x:Type vm:StartTile}">
+            <Button Style="{StaticResource Tile}" Command="{Binding DataContext.OpenTileCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}">
+                <DockPanel>
+                    <Border DockPanel.Dock="Left" Width="40" Height="40" Background="#071D39" VerticalAlignment="Top" Margin="0,0,12,0">
+                        <TextBlock Text="{Binding Glyph}" FontFamily="{StaticResource GlyphFont}" FontSize="18" Foreground="#5AA2FF" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <TextBlock DockPanel.Dock="Right" Text="&#xE72A;" FontFamily="{StaticResource GlyphFont}" FontSize="13" Foreground="{StaticResource Text.Dim}" VerticalAlignment="Top" Margin="8,2,0,0" />
+                    <StackPanel>
+                        <TextBlock Text="{Binding Title}" FontSize="13" FontWeight="SemiBold" />
+                        <TextBlock Text="{Binding Subtitle}" Foreground="{StaticResource Text.Dim}" TextWrapping="Wrap" Margin="0,3,0,0" />
+                    </StackPanel>
+                </DockPanel>
+            </Button>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="220" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- ───────── left navigation ───────── -->
+        <Border BorderBrush="{StaticResource Line.Soft}" BorderThickness="0,0,1,0">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Top" Margin="14,16,14,8">
+                    <Button Style="{StaticResource PrimaryButton}" Height="32" Command="{Binding NewProjectCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Style="{StaticResource Glyph}" Text="&#xE710;" Foreground="White" FontSize="11" />
+                            <TextBlock Text="Create project" Margin="8,0,0,0" FontWeight="SemiBold" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+                <TextBlock DockPanel.Dock="Bottom" Margin="16,0,16,14" Style="{StaticResource Caption}" TextWrapping="Wrap"
+                           Text="Edition: Research · Tugas Akhir Polman Bandung" />
+                <StackPanel Margin="0,6,0,0">
+                    <Button Style="{StaticResource NavLink}" Command="{Binding OpenProjectCommand}">
+                        <StackPanel Orientation="Horizontal"><TextBlock Style="{StaticResource Glyph}" Text="&#xE838;" Margin="0,0,10,0" /><TextBlock Text="Open project…" /></StackPanel>
+                    </Button>
+                    <Button Style="{StaticResource NavLink}" Command="{Binding NewDemoProjectCommand}">
+                        <StackPanel Orientation="Horizontal"><TextBlock Style="{StaticResource Glyph}" Text="&#xE7FC;" Margin="0,0,10,0" /><TextBlock Text="New demo project" /></StackPanel>
+                    </Button>
+                    <Button Style="{StaticResource NavLink}" Command="{Binding SaveProjectCommand}">
+                        <StackPanel Orientation="Horizontal"><TextBlock Style="{StaticResource Glyph}" Text="&#xE74E;" Margin="0,0,10,0" /><TextBlock Text="Save project" /></StackPanel>
+                    </Button>
+                    <Rectangle Height="1" Fill="{StaticResource Line.Soft}" Margin="14,8" />
+                    <TextBlock Text="LEARN" Style="{StaticResource SectionLabel}" Margin="16,4,0,4" />
+                    <Button Style="{StaticResource NavLink}" Click="Doc_Click" Tag="docs/ARCHITECTURE.md">
+                        <StackPanel Orientation="Horizontal"><TextBlock Style="{StaticResource Glyph}" Text="&#xE8A5;" Margin="0,0,10,0" /><TextBlock Text="Architecture" /></StackPanel>
+                    </Button>
+                    <Button Style="{StaticResource NavLink}" Click="Doc_Click" Tag="docs/MESSAGE_CONTRACT.md">
+                        <StackPanel Orientation="Horizontal"><TextBlock Style="{StaticResource Glyph}" Text="&#xE8BD;" Margin="0,0,10,0" /><TextBlock Text="Message contract" /></StackPanel>
+                    </Button>
+                    <Button Style="{StaticResource NavLink}" Click="Doc_Click" Tag="adapters/ros2/README.md">
+                        <StackPanel Orientation="Horizontal"><TextBlock Style="{StaticResource Glyph}" Text="&#xE943;" Margin="0,0,10,0" /><TextBlock Text="ROS 2 adapter" /></StackPanel>
+                    </Button>
+                    <Button Style="{StaticResource NavLink}" Click="DataFolder_Click">
+                        <StackPanel Orientation="Horizontal"><TextBlock Style="{StaticResource Glyph}" Text="&#xE8B7;" Margin="0,0,10,0" /><TextBlock Text="Data folder" /></StackPanel>
+                    </Button>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <!-- ───────── main ───────── -->
+        <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="18,16,18,24">
+                <!-- banner -->
+                <Border Background="#EEF2F6" Padding="24,18" Margin="0,0,0,20">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="520" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="Welcome to FMR Vantage" FontSize="24" FontWeight="SemiBold" />
+                            <TextBlock Text="Fleet management for mixed AGV / AMR fleets — clearance engineering, simulation studies and operator HMI in one tool."
+                                       Foreground="{StaticResource Text.Dim}" TextWrapping="Wrap" Margin="0,6,0,14" MaxWidth="520" HorizontalAlignment="Left" />
+                            <StackPanel Orientation="Horizontal">
+                                <Button Style="{StaticResource PrimaryButton}" Height="30" Padding="14,3" Command="{Binding NavigateCommand}" CommandParameter="{x:Static vm:Page.Monitor}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Style="{StaticResource Glyph}" Text="&#xE768;" Foreground="White" FontSize="11" />
+                                        <TextBlock Text="Open workspace" Margin="8,0,0,0" />
+                                    </StackPanel>
+                                </Button>
+                                <Button Style="{StaticResource ToolButton}" Height="30" Padding="12,3" Margin="8,0,0,0" Background="White" BorderBrush="{StaticResource Line}"
+                                        Command="{Binding NavigateCommand}" CommandParameter="{x:Static vm:Page.Fleet}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Style="{StaticResource Glyph}" Text="&#xE710;" FontSize="11" />
+                                        <TextBlock Text="Add robots" Margin="8,0,0,0" />
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <!-- current project card -->
+                        <Border Grid.Column="1" Background="White" BorderBrush="#D3D8DE" BorderThickness="1">
+                            <Grid Height="190">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="250" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Border Background="#E8ECF0">
+                                    <Grid>
+                                        <Image Source="{Binding HeroImage}" Width="130" HorizontalAlignment="Left" Stretch="Uniform" Margin="6,4,0,4" />
+                                        <Image Source="{Binding HeroImage2}" Width="140" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,2,14" Stretch="Uniform" />
+                                    </Grid>
+                                </Border>
+                                <StackPanel Grid.Column="1" Margin="16,14">
+                                    <TextBlock Text="CURRENT PROJECT" Style="{StaticResource SectionLabel}" Margin="0,0,0,4" />
+                                    <TextBlock Text="{Binding Project.Name}" FontSize="16" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
+                                    <TextBlock Text="{Binding Project.Description}" Foreground="{StaticResource Text.Dim}" TextWrapping="Wrap" Margin="0,4,0,10" MaxHeight="48" TextTrimming="CharacterEllipsis" />
+                                    <TextBlock FontFamily="{StaticResource MonoFont}" FontSize="11" Foreground="{StaticResource Text.Dim}">
+                                        <Run Text="{Binding Project.Robots.Count, Mode=OneWay}" /><Run Text=" robots · " /><Run Text="{Binding Project.Screens.Count, Mode=OneWay}" /><Run Text=" HMI screens" />
+                                    </TextBlock>
+                                    <TextBlock FontFamily="{StaticResource MonoFont}" FontSize="11" Foreground="{StaticResource Text.Faint}" Text="{Binding Project.Modified, StringFormat=modified {0:dd MMM yyyy HH:mm}}" Margin="0,2,0,0" />
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </Border>
+
+                <TextBlock Text="ENGINEERING" Style="{StaticResource SectionLabel}" Margin="0,0,0,8" />
+                <ItemsControl ItemsSource="{Binding EngineeringTiles}" ItemTemplate="{StaticResource TileTemplate}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate><WrapPanel /></ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+
+                <TextBlock Text="OPERATIONS · SCADA" Style="{StaticResource SectionLabel}" Margin="0,8,0,8" />
+                <ItemsControl ItemsSource="{Binding OperationsTiles}" ItemTemplate="{StaticResource TileTemplate}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate><WrapPanel /></ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+
+                <DockPanel Margin="0,14,0,6">
+                    <TextBlock Text="RECENT PROJECTS" Style="{StaticResource SectionLabel}" Margin="0" />
+                </DockPanel>
+                <Border BorderBrush="{StaticResource Line.Soft}" BorderThickness="0,1,0,0">
+                    <DataGrid ItemsSource="{Binding Recent}" GridLinesVisibility="None" MinHeight="80" RowHeight="30" Background="White" MouseDoubleClick="Recent_DoubleClick" x:Name="RecentGrid">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="NAME" Width="280">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Style="{StaticResource Glyph}" Text="&#xE8B7;" Foreground="#B76E00" Margin="0,0,8,0" />
+                                            <TextBlock Text="{Binding Name}" FontWeight="SemiBold" VerticalAlignment="Center" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="MODIFIED" Binding="{Binding ModifiedText}" Width="150" ElementStyle="{StaticResource MonoCell}" />
+                            <DataGridTextColumn Header="ROBOTS" Binding="{Binding Robots}" Width="70" ElementStyle="{StaticResource MonoCellRight}" />
+                            <DataGridTextColumn Header="LOCATION" Binding="{Binding Path}" Width="*" ElementStyle="{StaticResource MonoCell}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

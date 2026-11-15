@@ -1,0 +1,40 @@
+<UserControl x:Class="Vantage.Studio.Views.HmiRuntimeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:Vantage.Studio.ViewModels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance vm:HmiRuntimeViewModel}" Background="#2B3138">
+    <DockPanel>
+        <!-- operator header -->
+        <Border DockPanel.Dock="Top" Background="#071D39" Height="40">
+            <DockPanel Margin="12,0">
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding ScanInfo}" Foreground="#8A939C" FontFamily="{StaticResource MonoFont}" FontSize="10.5" VerticalAlignment="Center" Margin="0,0,16,0" />
+                    <TextBlock Text="{Binding Clock}" Foreground="White" FontFamily="{StaticResource MonoFont}" FontSize="13" VerticalAlignment="Center" Margin="0,0,16,0" />
+                    <Button Style="{StaticResource ToolButton}" Foreground="White" Command="{Binding EditScreenCommand}">
+                        <StackPanel Orientation="Horizontal"><TextBlock Style="{StaticResource Glyph}" Text="&#xE70F;" Foreground="White" /><TextBlock Text="Edit" Margin="5,0,0,0" Foreground="White" /></StackPanel>
+                    </Button>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Ellipse Width="9" Height="9" Margin="0,0,8,0" Fill="{Binding IsRunning, Converter={StaticResource RunBrush}}" />
+                    <TextBlock Text="HMI RUNTIME" Foreground="#5AA2FF" FontWeight="Bold" FontSize="12" VerticalAlignment="Center" Margin="0,0,16,0" />
+                    <ComboBox Width="200" ItemsSource="{Binding Screens}" SelectedItem="{Binding Screen}" DisplayMemberPath="Name" />
+                    <Rectangle Width="1" Fill="#454D56" Margin="12,8" />
+                    <Button Style="{StaticResource ToolButton}" Command="{Binding StartFleetCommand}">
+                        <StackPanel Orientation="Horizontal"><TextBlock Style="{StaticResource Glyph}" Text="&#xE768;" Foreground="#5CB85C" /><TextBlock Text="Start fleet" Margin="5,0,0,0" Foreground="White" /></StackPanel>
+                    </Button>
+                    <Button Style="{StaticResource ToolButton}" Command="{Binding PauseFleetCommand}">
+                        <StackPanel Orientation="Horizontal"><TextBlock Style="{StaticResource Glyph}" Text="&#xE769;" Foreground="White" /><TextBlock Text="Pause fleet" Margin="5,0,0,0" Foreground="White" /></StackPanel>
+                    </Button>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <Viewbox Stretch="Uniform" Margin="12">
+            <Border x:Name="Frame" BorderBrush="#454D56" BorderThickness="1">
+                <Canvas x:Name="Surface" />
+            </Border>
+        </Viewbox>
+    </DockPanel>
+</UserControl>
